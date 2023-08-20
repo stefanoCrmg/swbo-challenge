@@ -26,25 +26,25 @@ export const TransactionTable: React.FC<TransactionsTableProps> = ({
     <table className="table-auto">
       <thead className="bg-green-300">
         <tr>
-          <th className="border-2 border-slate-800">Timestamp</th>
-          <th className="border-2 border-slate-800">Currency</th>
-          <th className="border-2 border-slate-800">Amount</th>
-          <th className="border-2 border-slate-800">EUR Equivalent</th>
-          <th className="border-2 border-slate-800">Type</th>
-          <th className="border-2 border-slate-800">Status</th>
+          <th className="border-2 border-slate-800 px-4">Timestamp</th>
+          <th className="border-2 border-slate-800 px-4">Currency</th>
+          <th className="border-2 border-slate-800 px-4">Amount</th>
+          <th className="border-2 border-slate-800 px-4">EUR Equivalent</th>
+          <th className="border-2 border-slate-800 px-4">Type</th>
+          <th className="border-2 border-slate-800 px-4">Status</th>
         </tr>
       </thead>
       <tbody>
         {ordereredTransactions.map((data, index) => (
           <tr key={`unsafe-transaction-table-key-${index}`}>
-            <td>{data.timestamp.toDateString()}</td>
-            <td>{data.currency}</td>
-            <td>{data.amount}</td>
-            <td>
+            <td className="px-4">{data.timestamp.toDateString()}</td>
+            <td className="px-4">{data.currency}</td>
+            <td className="px-4">{data.amount}</td>
+            <td className="px-4">
               {eurFormatter(safeMul(data.amount, eurRates[data.currency]))}
             </td>
-            <td>{data.type}</td>
-            <td>{data.status}</td>
+            <td className="px-4">{data.type}</td>
+            <td className="px-4">{data.status}</td>
           </tr>
         ))}
       </tbody>

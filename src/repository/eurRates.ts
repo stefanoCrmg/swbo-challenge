@@ -1,7 +1,7 @@
 import { flow, pipe } from 'fp-ts/function'
 import * as TE from '@fp/TaskEither'
 import * as E from 'fp-ts/Either'
-import { EurRatesResponse, EurRatesResponseC } from '../codecs'
+import * as Codecs from '../codecs'
 import {
   FetchError,
   fromFetch,
@@ -13,7 +13,7 @@ import {
 
 export const getEurRates: TE.TaskEither<
   FetchError | NotJson | JsonParseError | DecodingFailure,
-  EurRatesResponse
+  Codecs.EurRatesResponse
 > = pipe(
   fromFetch('http://localhost:8080/api/eur-rates', {
     method: 'GET',
@@ -21,7 +21,7 @@ export const getEurRates: TE.TaskEither<
   TE.flatMap(getJson),
   TE.flatMapEither(
     flow(
-      EurRatesResponseC.decode,
+      Codecs.EurRatesResponseC.decode,
       E.mapLeft(() => new DecodingFailure()),
     ),
   ),

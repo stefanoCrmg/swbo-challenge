@@ -3,7 +3,7 @@ import * as TE from '@fp/TaskEither'
 import * as E from 'fp-ts/Either'
 import * as t from 'io-ts'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
-import { Transaction, TransactionC } from '../codecs'
+import * as Codecs from '../codecs'
 import {
   FetchError,
   fromFetch,
@@ -15,7 +15,7 @@ import {
 
 const TransactionsResponseC = t.readonly(
   t.type({
-    transactions: t.readonlyArray(TransactionC),
+    transactions: t.readonlyArray(Codecs.TransactionC),
   }),
 )
 export interface TransactionsResponse
@@ -27,7 +27,7 @@ class MissingTransactions {
 
 export const getTransactions: TE.TaskEither<
   FetchError | NotJson | JsonParseError | DecodingFailure | MissingTransactions,
-  RNEA.ReadonlyNonEmptyArray<Transaction>
+  RNEA.ReadonlyNonEmptyArray<Codecs.Transaction>
 > = pipe(
   fromFetch('http://localhost:8080/api/transactions', {
     method: 'GET',

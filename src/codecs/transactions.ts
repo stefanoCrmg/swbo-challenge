@@ -1,5 +1,5 @@
 import * as t from 'io-ts'
-import { DateFromISOString, UUID } from 'io-ts-types'
+import { DateFromISOString } from 'io-ts-types'
 
 const TransactionTypeC = t.keyof({
   withdrawal: null,

@@ -7,7 +7,7 @@ import { eurFormatter } from 'src/utils/formatter'
 import { safeAdd, safeMinus, safeMul } from 'src/utils/numbersUtils'
 import { match } from 'ts-pattern'
 
-type TransactionsCumulatedData = {
+export type TransactionsCumulatedData = {
   readonly totalCompletedWithdrawals: number
   readonly totalCompletedDeposits: number
   readonly totalPendingWithdrawals: number
@@ -48,7 +48,7 @@ const reduceTransactionData = (
     }))
     .exhaustive()
 
-const aggregateTransactionsByCurrency = (
+export const aggregateTransactionsByCurrency = (
   transactionsArray: RNEA.ReadonlyNonEmptyArray<Transaction>,
 ): RR.ReadonlyRecord<Transaction['currency'], TransactionsCumulatedData> =>
   pipe(
@@ -57,15 +57,14 @@ const aggregateTransactionsByCurrency = (
     RR.map(RNEA.reduce(initAggregatedTransactions, reduceTransactionData)),
   )
 
-type TransactionsTableProps = {
+type AggregateTransactionsTableProps = {
   readonly transactions: RNEA.ReadonlyNonEmptyArray<Transaction>
   readonly eurRates: EurRates
 }
 
-export const AggregatedTransactionTable: React.FC<TransactionsTableProps> = ({
-  transactions,
-  eurRates,
-}) => {
+export const AggregatedTransactionTable: React.FC<
+  AggregateTransactionsTableProps
+> = ({ transactions, eurRates }) => {
   const aggregatedTransactions = pipe(
     aggregateTransactionsByCurrency(transactions),
     RR.toReadonlyArray,
@@ -74,21 +73,23 @@ export const AggregatedTransactionTable: React.FC<TransactionsTableProps> = ({
     <table className="table-auto mt-4">
       <thead className="bg-amber-300">
         <tr>
-          <th className="border-2 border-slate-800">Currency</th>
-          <th className="border-2 border-slate-800">
+          <th className="border-2 border-slate-800 px-4">Currency</th>
+          <th className="border-2 border-slate-800 px-4">
             Total Completed Withdrawals
           </th>
-          <th className="border-2 border-slate-800">
+          <th className="border-2 border-slate-800 px-4">
             Total Completed Deposits
           </th>
-          <th className="border-2 border-slate-800">
+          <th className="border-2 border-slate-800 px-4">
             Total Pending Withdrawals
           </th>
-          <th className="border-2 border-slate-800">Total Pending Deposits</th>
-          <th className="border-2 border-slate-800">
+          <th className="border-2 border-slate-800 px-4">
+            Total Pending Deposits
+          </th>
+          <th className="border-2 border-slate-800 px-4">
             Total Balance (completed deposits - completed withdrawals)
           </th>
-          <th className="border-2 border-slate-800">
+          <th className="border-2 border-slate-800 px-4">
             Total Balance [EUR equivalent]
           </th>
         </tr>
@@ -96,13 +97,13 @@ export const AggregatedTransactionTable: React.FC<TransactionsTableProps> = ({
       <tbody>
         {aggregatedTransactions.map(([currency, data], index) => (
           <tr key={`unsafe-aggregated-transaction-table-key-${index}`}>
-            <td>{currency}</td>
-            <td>{data.totalCompletedWithdrawals}</td>
-            <td>{data.totalCompletedDeposits}</td>
-            <td>{data.totalPendingWithdrawals}</td>
-            <td>{data.totalPendingDeposits}</td>
-            <td>{data.totalBalance}</td>
-            <td>
+            <td className="px-4">{currency}</td>
+            <td className="px-4">{data.totalCompletedWithdrawals}</td>
+            <td className="px-4">{data.totalCompletedDeposits}</td>
+            <td className="px-4">{data.totalPendingWithdrawals}</td>
+            <td className="px-4">{data.totalPendingDeposits}</td>
+            <td className="px-4">{data.totalBalance}</td>
+            <td className="px-4">
               {eurFormatter(safeMul(data.totalBalance, eurRates[currency]))}
             </td>
           </tr>

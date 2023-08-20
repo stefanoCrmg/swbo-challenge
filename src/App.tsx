@@ -36,14 +36,18 @@ const Content: React.FC = () => {
       ),
     )
     .otherwise(() => (
-      <div>Fetching latest rates and transactions. This may take a while.</div>
+      <div className="p-6 bg-yellow-200 w-max border-2 border-solid border-yellow-600 font-bold">
+        Fetching latest rates and transactions. This may take a while.
+      </div>
     ))
 }
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Content />
+      <div className="h-screen flex items-center justify-center flex-col">
+        <Content />
+      </div>
     </QueryClientProvider>
   )
 }
